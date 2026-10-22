@@ -7,3 +7,5 @@ drf-spectacular>=0.16.0,<0.17
 psycopg2-binary>=2.9.9
 
 Pillow>=9.5.0,<9.6
+
+uwsgi>=2.0.21,<2.1

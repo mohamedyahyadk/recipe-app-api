@@ -1,5 +1,5 @@
-
 FROM python:3.12-alpine
+
 
 LABEL maintainer="mohamedyahyadkhila@gmail.com"
 
@@ -7,6 +7,7 @@ ENV PYTHONUNBUFFERED=1
 
 COPY ./requirements.txt /tmp/requirements.txt
 COPY ./requirements.dev.txt /tmp/requirements.dev.txt
+COPY ./scripts /scripts
 COPY ./app /app
 
 WORKDIR /app
@@ -26,7 +27,7 @@ RUN python -m venv /py && \
         linux-headers \
         postgresql-dev \
         zlib \
-        zlib-dev && \
+        zlib-dev linux-headers && \
     /py/bin/pip install -r /tmp/requirements.txt && \
     if [ "$DEV" = "true" ]; then \
         /py/bin/pip install -r /tmp/requirements.dev.txt; \
@@ -40,8 +41,11 @@ RUN python -m venv /py && \
     mkdir -p /vol/web/media && \
     mkdir -p /vol/web/static && \
     chown -R django-user:django-user /vol && \
-    chmod -R 755 /vol
+    chmod -R 755 /vol  && \
+    chmod -R +x /scripts
 
-ENV PATH="/py/bin:$PATH"
+ENV PATH="/scripts:/py/bin:$PATH"
 
 USER django-user
+
+CMD ["run.sh"]
